@@ -1,0 +1,47 @@
+
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Exemplo Alongpath - A-Frame</title>
+
+  <!-- A-Frame -->
+ <script src="https://aframe.io/releases/0.5.0/aframe.min.js"></script>
+
+  <!-- Componente Curve -->
+  <script src="https://unpkg.com/aframe-curve-component@0.1.2/dist/aframe-curve-component.min.js"></script>
+  
+  <!-- Componente Alongpath -->
+  <script src="https://unpkg.com/aframe-alongpath-component@1.0.5/dist/aframe-alongpath-component.min.js"></script>
+</head>
+
+<body>
+  <a-scene>
+    <a-sky color="#ECECEC"></a-sky>
+
+    <!-- Percurso definido por três pontos -->
+    <a-curve id="percurso">
+      <a-curve-point position="-2 1 -4"></a-curve-point>
+      <a-curve-point position="0 2 -4"></a-curve-point>
+      <a-curve-point position="2 1 -4"></a-curve-point>
+    </a-curve>
+
+    <!-- Objeto que percorre o caminho -->
+    <a-box
+      color="#8A2BE2"
+      position="-2 1 -4"
+      alongpath="curve: #percurso; dur: 5000; loop: true"
+    ></a-box>
+
+    <a-plane
+      rotation="-90 0 0"
+      width="10"
+      height="10"
+      color="#CCCCCC"
+    ></a-plane>
+
+    <a-camera position="0 2 6"></a-camera>
+  </a-scene>
+</body>
+</html>
