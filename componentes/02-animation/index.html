@@ -1,0 +1,33 @@
+
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Exemplo Animation - A-Frame</title>
+
+  <script src="https://aframe.io/releases/1.3.0/aframe.min.js"></script>
+</head>
+
+<body>
+  <a-scene>
+    <a-sky color="#ECECEC"></a-sky>
+
+    <!-- Cubo animado -->
+    <a-box
+      position="0 1 -4"
+      color="#8A2BE2"
+      animation="property: rotation; to: 0 360 0; dur: 3000; loop: true; easing: linear">
+    </a-box>
+
+    <a-plane
+      rotation="-90 0 0"
+      width="10"
+      height="10"
+      color="#CCCCCC">
+    </a-plane>
+
+    <a-camera position="0 2 6"></a-camera>
+  </a-scene>
+</body>
+</html>
