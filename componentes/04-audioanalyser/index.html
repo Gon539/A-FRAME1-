@@ -1,0 +1,251 @@
+
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Audio Visualizer 3D</title>
+
+  <script src="https://aframe.io/releases/1.7.0/aframe.min.js"></script>
+
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<div id="titulo">
+  <h1>SOUND / FORM</h1>
+  <p>REAL-TIME AUDIO VISUALIZER</p>
+</div>
+
+<button id="microfone">ATIVAR MICROFONE</button>
+
+<div id="rodape">
+  AUDIO REACTIVE EXPERIENCE
+</div>
+
+<div id="estado">
+  STANDBY
+</div>
+
+<a-scene
+  background="color: #000000"
+  renderer="antialias: false; colorManagement: true"
+>
+  <a-camera position="0 1.6 0"></a-camera>
+</a-scene>
+
+<script>
+const TOTAL = 300;
+const RAIO = 1.5;
+
+const particulas = [];
+
+let audioContext;
+let analisador;
+let dados;
+let ativo = false;
+
+let instancedMesh;
+let dummy;
+let geometria;
+let material;
+
+let ultimoFrame = 0;
+const INTERVALO = 1000 / 30;
+
+const cena = document.querySelector("a-scene");
+
+cena.addEventListener("loaded", iniciar);
+
+function iniciar() {
+
+  const THREE = AFRAME.THREE;
+  const scene = cena.object3D;
+
+  geometria = new THREE.SphereGeometry(1, 6, 6);
+
+  material = new THREE.MeshBasicMaterial({
+    color: 0xffffff
+  });
+
+  instancedMesh = new THREE.InstancedMesh(
+    geometria,
+    material,
+    TOTAL
+  );
+
+  dummy = new THREE.Object3D();
+
+  for (let i = 0; i < TOTAL; i++) {
+
+    const phi = Math.acos(
+      1 - 2 * (i + 0.5) / TOTAL
+    );
+
+    const theta =
+      Math.PI * (1 + Math.sqrt(5)) * i;
+
+    const x = Math.sin(phi) * Math.cos(theta);
+    const y = Math.cos(phi);
+    const z = Math.sin(phi) * Math.sin(theta);
+
+    const frequencia = Math.random();
+
+    let tamanho;
+
+    if (frequencia < 0.33) {
+      tamanho = 0.035 + Math.random() * 0.020;
+    } else if (frequencia < 0.66) {
+      tamanho = 0.020 + Math.random() * 0.010;
+    } else {
+      tamanho = 0.008 + Math.random() * 0.010;
+    }
+
+    particulas.push({
+      x,
+      y,
+      z,
+      frequencia,
+      tamanho,
+      fase: Math.random() * Math.PI * 2
+    });
+
+    dummy.position.set(
+      x * RAIO,
+      y * RAIO,
+      z * RAIO
+    );
+
+    dummy.scale.setScalar(tamanho);
+    dummy.updateMatrix();
+
+    instancedMesh.setMatrixAt(i, dummy.matrix);
+  }
+
+  instancedMesh.instanceMatrix.needsUpdate = true;
+
+  // A esfera fica centrada à frente da câmara.
+  instancedMesh.position.set(0, 1.6, -4);
+
+  scene.add(instancedMesh);
+
+  animar();
+}
+
+const botao = document.querySelector("#microfone");
+
+botao.addEventListener("click", async () => {
+
+  try {
+
+    const stream = await navigator.mediaDevices.getUserMedia({
+      audio: true
+    });
+
+    audioContext = new AudioContext();
+
+    if (audioContext.state === "suspended") {
+      await audioContext.resume();
+    }
+
+    const fonte = audioContext.createMediaStreamSource(stream);
+
+    analisador = audioContext.createAnalyser();
+    analisador.fftSize = 2048;
+    analisador.smoothingTimeConstant = 0.8;
+
+    fonte.connect(analisador);
+
+    dados = new Uint8Array(analisador.frequencyBinCount);
+
+    ativo = true;
+    botao.textContent = "MICROFONE ATIVO";
+
+  } catch (erro) {
+
+    console.error(erro);
+    alert("Não foi possível aceder ao microfone.");
+
+  }
+});
+
+function animar(tempo) {
+
+  requestAnimationFrame(animar);
+
+  if (!instancedMesh) return;
+
+  if (tempo - ultimoFrame < INTERVALO) return;
+
+  ultimoFrame = tempo;
+
+  let graves = 0;
+  let medios = 0;
+  let agudos = 0;
+
+  if (ativo && analisador) {
+
+    analisador.getByteFrequencyData(dados);
+
+    function media(inicio, fim) {
+
+      let soma = 0;
+
+      for (let i = inicio; i < fim; i++) {
+        soma += dados[i];
+      }
+
+      return soma / (fim - inicio) / 255;
+    }
+
+    graves = media(0, 10);
+    medios = media(10, 80);
+    agudos = media(80, 250);
+  }
+
+  const tempoSegundos = tempo * 0.001;
+
+  for (let i = 0; i < TOTAL; i++) {
+
+    const p = particulas[i];
+
+    let intensidade;
+
+    if (p.frequencia < 0.33) {
+      intensidade = graves;
+    } else if (p.frequencia < 0.66) {
+      intensidade = medios;
+    } else {
+      intensidade = agudos;
+    }
+
+    const ondulacao =
+      Math.sin(tempoSegundos * 2 + p.fase) * 0.025;
+
+    const deformacao =
+      intensidade * 0.9 + ondulacao;
+
+    const distancia = RAIO + deformacao;
+
+    const pulsacao = 1 + intensidade * 0.7;
+
+    dummy.position.set(
+      p.x * distancia,
+      p.y * distancia,
+      p.z * distancia
+    );
+
+    dummy.scale.setScalar(p.tamanho * pulsacao);
+
+    dummy.updateMatrix();
+
+    instancedMesh.setMatrixAt(i, dummy.matrix);
+  }
+
+  instancedMesh.instanceMatrix.needsUpdate = true;
+}
+</script>
+
+</body>
+</html>

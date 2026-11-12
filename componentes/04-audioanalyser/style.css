@@ -1,0 +1,99 @@
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: #050505;
+  color: #fff;
+  font-family: Arial, sans-serif;
+  overflow: hidden;
+}
+
+/* Título */
+#titulo {
+  position: fixed;
+  top: 35px;
+  left: 40px;
+  z-index: 10;
+}
+
+#titulo h1 {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 400;
+  letter-spacing: 5px;
+}
+
+#titulo p {
+  margin-top: 8px;
+  color: #777;
+  font-size: 9px;
+  letter-spacing: 3px;
+}
+
+/* Botão do microfone */
+#microfone {
+  position: fixed;
+  top: 35px;
+  right: 40px;
+  z-index: 9999;
+  padding: 12px 22px;
+  background: transparent;
+  color: white;
+  border: 1px solid #555;
+  border-radius: 30px;
+  cursor: pointer;
+  font-size: 10px;
+  letter-spacing: 2px;
+  transition: 0.3s;
+}
+
+#microfone:hover {
+  background: white;
+  color: black;
+  border-color: white;
+}
+
+/* Indicador inferior */
+#rodape {
+  position: fixed;
+  bottom: 30px;
+  left: 40px;
+  z-index: 10;
+  color: #777;
+  font-size: 9px;
+  letter-spacing: 2px;
+}
+
+#estado {
+  position: fixed;
+  bottom: 30px;
+  right: 40px;
+  z-index: 10;
+  color: #888;
+  font-size: 9px;
+  letter-spacing: 2px;
+}
+
+#estado::before {
+  content: "";
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  margin-right: 9px;
+  border-radius: 50%;
+  background: #555;
+}
+
+#estado.ativo::before {
+  background: white;
+  box-shadow: 0 0 10px white;
+}
+
+/* Cena 3D */
+a-scene {
+  position: fixed;
+  inset: 0;
+}
