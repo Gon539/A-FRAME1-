@@ -1,33 +1,36 @@
-
-# 04 - Audio Analyser
+# 05 - Controller Cursor
 
 ## Descrição
-Este projeto apresenta uma experiência visual 3D interativa desenvolvida com A-Frame. A aplicação utiliza o microfone para captar o som ambiente e transformar as frequências sonoras numa animação de partículas.
+Este projeto explora o componente Controller Cursor do A-Frame Registry, que permite utilizar um cursor associado a controladores de realidade virtual para apontar e interagir com objetos num ambiente 3D.
+
+## Objetivo
+Compreender o funcionamento do Controller Cursor e explorar a interação com objetos tridimensionais através de um cursor.
 
 ## Funcionalidades
-- Visualização de uma esfera formada por partículas 3D.
-- Captação de áudio através do microfone.
-- Reação das partículas às frequências graves, médias e agudas.
-- Animação dinâmica em tempo real.
+- Ambiente 3D interativo.
+- Representação de três objetos: cubo, esfera e cilindro.
+- Alteração da cor dos objetos quando o cursor passa sobre eles.
+- Animação de rotação do cubo.
+- Integração do componente Controller Cursor.
+- Simulação da interação através do rato no navegador.
 
 ## Tecnologias utilizadas
 - HTML5
-- CSS3
 - JavaScript
 - A-Frame 1.7.0
-- Web Audio API
+- Controller Cursor Component 0.2.7
 - Three.js
 
 ## Como executar
-1. Abrir a pasta `04-audioanalyser`.
+1. Abrir a pasta `05-controller-cursor`.
 2. Executar o ficheiro `index.html` através do Live Server.
-3. Permitir o acesso ao microfone quando solicitado.
-4. Clicar no botão "ATIVAR MICROFONE".
-5. Produzir som para observar a reação das partículas.
+3. Utilizar o rato para passar sobre os diferentes objetos.
+4. Observar a alteração de cor de cada objeto.
 
-## Estrutura do projeto
-- `index.html` – estrutura e funcionamento da aplicação.
-- `style.css` – estilos e interface visual.
+## Limitações do teste
+O teste foi realizado num computador, através do navegador, sem recurso a óculos de realidade virtual ou controladores físicos. Por esse motivo, não foi possível testar diretamente a interação com os comandos VR.
 
-## Objetivo
-Explorar a utilização de áudio numa experiência multimédia interativa em ambiente 3D.
+Foi também necessária uma adaptação para contornar uma incompatibilidade entre a versão antiga do componente e a versão atual do A-Frame.
+
+## Objetivo da experiência
+Explorar a interação com objetos 3D através de um cursor, compreendendo a sua aplicação em ambientes de realidade virtual.

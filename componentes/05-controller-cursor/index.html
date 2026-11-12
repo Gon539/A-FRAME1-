@@ -1,0 +1,92 @@
+
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>05 - Controller Cursor</title>
+
+    <!-- A-Frame -->
+    <script src="https://aframe.io/releases/1.7.0/aframe.min.js"></script>
+
+    <!-- Compatibilidade com o componente antigo -->
+    <script>
+        if (!THREE.CylinderBufferGeometry) {
+            THREE.CylinderBufferGeometry = THREE.CylinderGeometry;
+        }
+    </script>
+
+    <!-- Controller Cursor -->
+    <script src="https://unpkg.com/aframe-controller-cursor-component@0.2.7/dist/aframe-controller-cursor-component.min.js"></script>
+</head>
+
+<body>
+
+<a-scene background="color: #20232a">
+
+    <!-- Iluminação -->
+    <a-light type="ambient" color="#ffffff" intensity="1"></a-light>
+    <a-light type="directional" position="-2 4 3" intensity="1"></a-light>
+
+    <!-- Chão -->
+    <a-plane
+        position="0 0 0"
+        rotation="-90 0 0"
+        width="20"
+        height="20"
+        color="#30343b">
+    </a-plane>
+
+    <!-- Cubo azul -->
+    <a-box
+        class="interativo"
+        position="-2 1.5 -4"
+        color="#4CC3D9"
+        animation="property: rotation; to: 0 360 0; loop: true; dur: 5000"
+        animation__hover="property: material.color; type: color; to: #ffffff; startEvents: mouseenter; dur: 200"
+        animation__leave="property: material.color; type: color; to: #4CC3D9; startEvents: mouseleave; dur: 200">
+    </a-box>
+
+    <!-- Esfera vermelha -->
+    <a-sphere
+        class="interativo"
+        position="0 1.5 -4"
+        radius="0.8"
+        color="#EF476F"
+        animation__hover="property: material.color; type: color; to: #ffffff; startEvents: mouseenter; dur: 200"
+        animation__leave="property: material.color; type: color; to: #EF476F; startEvents: mouseleave; dur: 200">
+    </a-sphere>
+
+    <!-- Cilindro verde -->
+    <a-cylinder
+        class="interativo"
+        position="2 1.5 -4"
+        radius="0.6"
+        height="1.5"
+        color="#06D6A0"
+        animation__hover="property: material.color; type: color; to: #ffffff; startEvents: mouseenter; dur: 200"
+        animation__leave="property: material.color; type: color; to: #06D6A0; startEvents: mouseleave; dur: 200">
+    </a-cylinder>
+
+    <!-- Controladores VR -->
+    <a-entity vive-controls="hand: left"></a-entity>
+
+    <a-entity
+        vive-controls="hand: right"
+        controller-cursor>
+    </a-entity>
+
+    <!-- Câmara -->
+    <a-camera position="0 1.6 0"></a-camera>
+
+    <!-- Cursor do rato para testar no computador -->
+    <a-entity
+        cursor="rayOrigin: mouse; fuse: false"
+        raycaster="objects: .interativo">
+    </a-entity>
+
+</a-scene>
+
+</body>
+</html>
